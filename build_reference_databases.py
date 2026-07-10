@@ -277,7 +277,7 @@ def write_readme(summary: dict) -> None:
     readme.write_text(
         f"""# Reference Databases
 
-Built for the arsM/crAssphage pilot adapted from Xia et al. 2024.
+Built for the arsM/crAssphage pilot workflow.
 
 ## arsM HMM
 
