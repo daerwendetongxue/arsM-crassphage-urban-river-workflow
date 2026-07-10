@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bin
+tmp/
+status/
+0
+1
+
+# Downloaded supplementary source files
+Xia_2024_hgcAB_SI/*.pdf
+Xia_2024_hgcAB_SI/*.xlsx
+
+# Raw reads and large intermediate bioinformatics outputs
+*.sra
+*.fastq
+*.fq
+*.fastq.gz
+*.fq.gz
+*.sam
+*.bam
+*.bai
+*_assembly/
+*.bt2
+*.bt2l
+
+# Phylogenetic and alignment intermediates
+*.afa
+*.aln
+*.treefile
+*.iqtree
+*.ckp.gz
+*.mldist
+*.bionj
+*.contree
+*.splits.nex
+
+# Local run outputs
+*_mapped_reads.txt
+*_coverage.txt
+*.bowtie2.log
