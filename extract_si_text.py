@@ -5,10 +5,10 @@ from pypdf import PdfReader
 
 
 FILES = [
-    Path("Xia_2024_hgcAB_SI/41467_2024_53479_MOESM1_ESM.pdf"),
-    Path("Xia_2024_hgcAB_SI/41467_2024_53479_MOESM2_ESM.pdf"),
-    Path("Xia_2024_hgcAB_SI/41467_2024_53479_MOESM4_ESM.pdf"),
-    Path("Xia_2024_hgcAB_SI/41467_2024_53479_MOESM5_ESM.pdf"),
+    Path("supplementary_files/metadata_text_1.pdf"),
+    Path("supplementary_files/metadata_text_2.pdf"),
+    Path("supplementary_files/metadata_text_3.pdf"),
+    Path("supplementary_files/metadata_text_4.pdf"),
 ]
 
 OUT_DIR = Path("si_text")
