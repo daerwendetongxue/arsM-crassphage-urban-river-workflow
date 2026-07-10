@@ -13,9 +13,9 @@ status/
 0
 1
 
-# Downloaded supplementary source files
-Xia_2024_hgcAB_SI/*.pdf
-Xia_2024_hgcAB_SI/*.xlsx
+# Downloaded local metadata/source files
+supplementary_files/*.pdf
+supplementary_files/*.xlsx
 
 # Raw reads and large intermediate bioinformatics outputs
 *.sra
