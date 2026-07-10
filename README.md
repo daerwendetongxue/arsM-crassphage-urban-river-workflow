@@ -1,8 +1,8 @@
 # Workflow
 
-This repository documents an arsM/crAssphage screening workflow for urban river metagenomes, adapted from the public workflow style of `sulfurlab/urban_methylmercury_project`.
+This repository documents an arsM/crAssphage screening workflow for urban river metagenomes.
 
-The workflow builds reference databases, selects pilot rivers from Xia et al. 2024 supplementary data, screens the arsenic methylation marker `arsM`, and compares the signal with a crAssphage sewage marker.
+The workflow builds reference databases, selects pilot rivers from public sample metadata, screens the arsenic methylation marker `arsM`, and compares the signal with a crAssphage sewage marker.
 
 # 1. Software used in this workflow
 
@@ -70,9 +70,9 @@ conda create -n arsm_crass -c conda-forge -c bioconda \
 conda activate arsm_crass
 ```
 
-# 2.1 Supplementary file inspection
+# 2.1 Metadata file inspection
 
-Use the supplementary files from Xia et al. 2024 to summarize sheets and PDF text.
+Use local metadata files to summarize sample tables and extracted text.
 
 ```shell
 python inspect_si_files.py > si_overview.json
@@ -278,7 +278,7 @@ iqtree2 -s river.arsM_candidates.nr.afa -B 1000 -T AUTO --prefix river_arsM_iqtr
 |  |- crAssphage_reference/
 |  `- logs/
 |- si_text/
-`- Xia_2024_hgcAB_SI/
+`- supplementary_files/
 ```
 
 # 4. Operational notes
