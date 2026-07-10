@@ -1,10 +1,10 @@
 # arsM Conserved Domain and Motif Filtering Criteria
 
-Purpose: define an arsM filtering rule analogous to the hgcA/hgcB manual motif check in Xia et al. 2024, but adapted to ArsM biology.
+Purpose: define an arsM filtering rule for conserved-domain and cysteine-position review.
 
-## Why hgcAB rules cannot be copied directly
+## Why a simple motif rule is not enough
 
-The hgcA/hgcB workflow removes sequences missing a specific HgcA cap-helix motif or HgcB ferredoxin-binding motifs. ArsM is different. It belongs to the SAM-dependent methyltransferase superfamily, and ArsM proteins vary in length and domain architecture. A simple exact short motif rule would either admit many ordinary SAM methyltransferases or discard real ArsM variants.
+ArsM belongs to the SAM-dependent methyltransferase superfamily, and ArsM proteins vary in length and domain architecture. A simple exact short motif rule would either admit many ordinary SAM methyltransferases or discard real ArsM variants.
 
 ## Reference Features
 
@@ -22,8 +22,8 @@ Use the following features for manual and automated screening:
 
 3. Conserved cysteine residues
    - Canonical ArsM studies use conserved cysteine residues corresponding to CmArsM Cys44, Cys72, Cys174, and Cys224.
-   - A literature-supported strict rule is: retain sequences with SAM-binding domains and at least 3 of these 4 conserved cysteine positions after alignment.
-   - Later work shows some active non-canonical ArsM proteins may require only two conserved cysteine residues, so the 3/4 rule is conservative rather than universal.
+   - A conservative strict rule is: retain sequences with SAM-binding domains and at least 3 of these 4 conserved cysteine positions after alignment.
+   - Some non-canonical ArsM-like proteins may retain fewer conserved cysteine residues, so the 3/4 rule is conservative rather than universal.
 
 4. C-terminal ArsM domain
    - Auxiliary model: `PF31200_AS3MT_C_terminal_domain.hmm`
@@ -57,7 +57,7 @@ Required:
 
 - significant hit to `PTHR43675`;
 - retained SAM-binding methyltransferase region;
-- at least 2 conserved cysteine positions, preferably including the central As-binding pair corresponding approximately to CmArsM Cys174/Cys224 or a documented BlArsM-like pattern;
+- at least 2 conserved cysteine positions, preferably including the central As-binding pair corresponding approximately to CmArsM Cys174/Cys224 or a documented non-canonical pattern;
 - sequence clusters with known ArsM/AS3MT references rather than unrelated SAM methyltransferases.
 
 Suggested label:
@@ -112,10 +112,3 @@ arsM_tiered_filtered.faa
 arsM_tiered_filtered.fna
 arsM_filtering_decisions.tsv
 ```
-
-## Core Literature Support
-
-- Ye et al. 2017, Scientific Reports: used SAM-binding domains and at least 3 of 4 conserved cysteine residues corresponding to CmArsM C44/C72/C174/C224.
-- Chen and Rosen 2023, Environmental Science & Technology: ArsM proteins can have A/B/C domain diversity; small ArsMs may lack the C-terminal domain.
-- Huang et al. 2018, Environmental Microbiology: BlArsM is an active non-canonical ArsM requiring only two conserved cysteine residues.
-- Qin et al. / PaArsM work: microbial ArsM proteins commonly show four conserved cysteines and three SAM-interaction motifs.
