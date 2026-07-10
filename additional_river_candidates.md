@@ -31,6 +31,18 @@ Geographic contrast: Marecchia + Marano + Rio Melo (3 single libraries)
 
 This design adds five rivers while keeping the statistical analysis honest: correlation is performed only within the two multi-sample rivers, while the Italian samples remain exploratory.
 
+## Current Rivers That Can Be Replaced
+
+The existing river list is not biologically invalid. These recommendations only rank datasets by their usefulness for a first-pass arsM/crAssphage association analysis.
+
+| Replacement priority | River | Samples | crAssphage detection | Existing marker-crAssphage R | p | Recommendation |
+|---|---|---:|---|---:|---:|---|
+| 1 | Lockwitzbach River | 58 | 45/58 | 0.010 | 0.942 | Replace first. Despite its large sample count, the existing metadata show no usable within-river association. |
+| 2 | Alexander River | 16 | 14/16 | 0.496 | 0.051 | Replace with Tijuana River when a clearer sewage-gradient validation set is needed. |
+| 3 | Kampala River | 20 | 20/20 | 0.570 | 0.00868 | Retain only if regional coverage is important; otherwise replace with Kanda River for a stronger spatial and seasonal design. |
+
+If only one current river is removed, remove Lockwitzbach River. If three are removed, replace Lockwitzbach, Alexander, and Kampala with Kanda River, Tijuana River, and one Italian river-mouth sample for geographic contrast.
+
 ## Download Identifiers
 
 Kanda River contains 44 paired-end WGS runs under `PRJNA976879`. Retrieve the WGS runs from the project metadata rather than downloading the project's 16S and single-cell records.
