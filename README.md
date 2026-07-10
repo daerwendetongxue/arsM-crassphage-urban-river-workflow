@@ -2,15 +2,39 @@
 
 This repository documents an arsM/crAssphage screening workflow for urban river metagenomes, adapted from the public workflow style of `sulfurlab/urban_methylmercury_project`.
 
-The current project focuses on building reference databases, selecting pilot rivers from Xia et al. 2024 supplementary data, screening arsenic methylation marker `arsM`, and comparing the signal with a crAssphage sewage marker.
+The workflow builds reference databases, selects pilot rivers from Xia et al. 2024 supplementary data, screens the arsenic methylation marker `arsM`, and compares the signal with a crAssphage sewage marker.
 
 # 1. Software used in this workflow
+
+## 1.1 Recommended installation paths
+
+The examples below assume a Linux server or WSL2 workstation. Keep software, references, raw data, and results separated so that large temporary files can be cleaned without touching the workflow repository.
+
+```shell
+# Conda or micromamba environment
+~/miniconda3/envs/arsm_crass/bin
+
+# Project repository
+~/projects/arsM-crassphage-urban-river-workflow
+
+# Large raw reads and intermediate assemblies
+/mnt/f/As/raw_reads
+/mnt/f/As/river_runs
+/mnt/f/As/tmp
+
+# Local reference database copy
+~/projects/arsM-crassphage-urban-river-workflow/reference
+```
+
+On this Windows/WSL workstation, large generated files were kept outside the GitHub repository, under `F:\As` or `D:\codex`, rather than on the C drive.
+
+## 1.2 Core software
 
 [Python3](https://www.python.org/downloads/)
 
 [pypdf](https://pypdf.readthedocs.io/)
 
-[HMMER](http://hmmer.org/)
+[Axel](https://github.com/axel-download-accelerator/axel) or [aria2](https://aria2.github.io/)
 
 [Sra-tools](https://github.com/ncbi/sra-tools)
 
@@ -19,6 +43,10 @@ The current project focuses on building reference databases, selecting pilot riv
 [MEGAHIT](https://github.com/voutcn/megahit)
 
 [Prodigal](https://github.com/hyattpd/Prodigal)
+
+[HMMER](http://hmmer.org/)
+
+[CD-HIT](https://sites.google.com/view/cd-hit)
 
 [Bowtie2](https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)
 
@@ -32,29 +60,17 @@ The current project focuses on building reference databases, selecting pilot riv
 
 [BLAST+](https://blast.ncbi.nlm.nih.gov/)
 
-# 2. Repository layout
+## 1.3 Example environment setup
 
-```text
-.
-|- README.md
-|- requirements.txt
-|- build_reference_databases.py
-|- extract_si_text.py
-|- inspect_si_files.py
-|- summarize_si_overview.py
-|- pilot_river_selection.md
-|- arsM_pipeline_lessons.md
-|- reference/
-|  |- README.md
-|  |- arsM_hmm/
-|  |- arsM_public_database/
-|  |- crAssphage_reference/
-|  `- logs/
-|- si_text/
-`- Xia_2024_hgcAB_SI/
+```shell
+conda create -n arsm_crass -c conda-forge -c bioconda \
+    python=3.11 pypdf sra-tools fastp megahit prodigal hmmer cd-hit \
+    bowtie2 samtools seqkit muscle iqtree blast aria2
+
+conda activate arsm_crass
 ```
 
-# 3.1 Inspect supplementary files
+# 2.1 Supplementary file inspection
 
 Use the supplementary files from Xia et al. 2024 to summarize sheets and PDF text.
 
@@ -69,7 +85,7 @@ PDF text can be extracted separately:
 python extract_si_text.py
 ```
 
-# 3.2 Select pilot rivers
+# 2.2 Pilot river selection
 
 Pilot rivers were selected to keep the first screening run small while preserving a strong sewage-gradient signal.
 
@@ -87,7 +103,7 @@ ShiQi River + Plata River + Ter River + Suze River + Han River = 54 samples
 
 The accession list and selection rationale are recorded in `pilot_river_selection.md`.
 
-# 3.3 Build reference databases
+# 2.3 Reference database construction
 
 This step downloads arsM-related HMMs and public protein references from InterPro, UniProt, and NCBI, then downloads the prototype crAssphage genome `NC_024711.1`.
 
@@ -110,7 +126,7 @@ Current reference summary:
 }
 ```
 
-# 3.4 Download public metagenomes
+# 2.4 Download of publicly available metagenomic data
 
 For each pilot river, download public SRA/ENA reads by accession. Prefer ENA FASTQ download when available because it avoids extra SRA conversion and temporary disk use.
 
@@ -121,7 +137,19 @@ while IFS= read -r accession; do
 done < accessions.txt
 ```
 
-# 3.5 Read trimming
+# 2.5 FASTQ format from SRA files
+
+Use this only when ENA FASTQ files are not available.
+
+```shell
+for accession in SRR* ERR*; do
+    if [ -f "$accession" ]; then
+        fasterq-dump --split-3 "$accession" -O . -e 30
+    fi
+done
+```
+
+# 2.6 Read trimming
 
 ```shell
 for file in *_1.fastq.gz; do
@@ -136,7 +164,7 @@ done
 
 For single-end samples, switch to `fastp --in1 ... --out1 ...`.
 
-# 3.6 crAssphage read counting
+# 2.7 crAssphage abundance counting
 
 Build the Bowtie2 index:
 
@@ -156,7 +184,7 @@ bowtie2 --no-unal -x crAssphage_NC_024711 \
 
 Treat this single genome as a narrow sewage marker. Zero mapping to `NC_024711.1` does not prove absence of sewage signal.
 
-# 3.7 Assembly
+# 2.8 Assembly
 
 ```shell
 megahit \
@@ -173,7 +201,9 @@ megahit \
 
 These settings are resource-adjusted for a 16GB Windows/WSL workstation. Use higher-memory settings on a dedicated server.
 
-# 3.8 Gene prediction
+# 2.9 arsM catalog construction
+
+Predict genes:
 
 ```shell
 prodigal \
@@ -183,9 +213,7 @@ prodigal \
     -p meta
 ```
 
-# 3.9 arsM candidate screening
-
-Use the PANTHER HMM as the primary detector and the Pfam C-terminal HMM as auxiliary evidence.
+Screen candidates with the PANTHER HMM as the primary detector and the Pfam C-terminal HMM as auxiliary evidence:
 
 ```shell
 hmmsearch --domtblout sample.arsM.PTHR43675.domtblout \
@@ -201,7 +229,7 @@ Parse HMMER `domtblout` fields carefully. Use full E-value `$7`, domain conditio
 
 Manual/curated filtering should check conserved-domain support and cysteine-position motifs as documented in `reference/arsM_hmm/arsM_conserved_domain_filtering.md`.
 
-# 3.10 Build river-level arsM catalogs
+# 2.10 Build river-level arsM catalogs and abundance matrices
 
 After each sample yields small candidate files, merge candidates at the river level, remove redundancy, and align the final candidate set.
 
@@ -211,8 +239,6 @@ cd-hit -i river.arsM_candidates.faa -o river.arsM_candidates.nr.faa -c 0.97 -n 5
 
 muscle -super5 river.arsM_candidates.nr.faa -output river.arsM_candidates.nr.afa
 ```
-
-# 3.11 Abundance mapping
 
 Re-download or reuse clean reads one sample at a time, map reads back to the river-level arsM catalog, and remove large read/assembly intermediates after each sample is complete.
 
@@ -226,11 +252,33 @@ bowtie2 --no-unal -x river_arsM_catalog \
     | samtools view -c - > sample.arsM.mapped_reads.txt
 ```
 
-# 3.12 Phylogenetic analysis
+# 2.11 Phylogenetic analysis
 
 ```shell
 muscle -super5 river.arsM_candidates.nr.faa -output river.arsM_candidates.nr.afa
 iqtree2 -s river.arsM_candidates.nr.afa -B 1000 -T AUTO --prefix river_arsM_iqtree
+```
+
+# 3. Repository layout
+
+```text
+.
+|- README.md
+|- requirements.txt
+|- build_reference_databases.py
+|- extract_si_text.py
+|- inspect_si_files.py
+|- summarize_si_overview.py
+|- pilot_river_selection.md
+|- arsM_pipeline_lessons.md
+|- reference/
+|  |- README.md
+|  |- arsM_hmm/
+|  |- arsM_public_database/
+|  |- crAssphage_reference/
+|  `- logs/
+|- si_text/
+`- Xia_2024_hgcAB_SI/
 ```
 
 # 4. Operational notes
