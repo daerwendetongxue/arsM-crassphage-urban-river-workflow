@@ -103,6 +103,8 @@ ShiQi River + Plata River + Ter River + Suze River + Han River = 54 samples
 
 The accession list and selection rationale are recorded in `pilot_river_selection.md`.
 
+Independent river additions are listed in `additional_river_candidates.md`. Use Kanda River and Tijuana River for new multi-sample analyses, and keep the three Italian river-mouth datasets as exploratory geographic contrasts.
+
 # 2.3 Reference database construction
 
 This step downloads arsM-related HMMs and public protein references from InterPro, UniProt, and NCBI, then downloads the prototype crAssphage genome `NC_024711.1`.
@@ -270,6 +272,7 @@ iqtree2 -s river.arsM_candidates.nr.afa -B 1000 -T AUTO --prefix river_arsM_iqtr
 |- inspect_si_files.py
 |- summarize_si_overview.py
 |- pilot_river_selection.md
+|- additional_river_candidates.md
 |- arsM_pipeline_lessons.md
 |- reference/
 |  |- README.md
