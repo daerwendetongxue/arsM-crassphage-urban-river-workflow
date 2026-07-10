@@ -1,6 +1,6 @@
 # Pilot River Selection for arsM Screening
 
-Source file: `Xia_2024_hgcAB_SI/41467_2024_53479_MOESM3_ESM.xlsx`, Supplementary Data 1 and 2.
+Source file: local public sample metadata table.
 
 ## Selection Logic
 
@@ -8,14 +8,14 @@ Use a small subset first, not all 19 rivers. The first pilot should prioritize:
 
 - small sample count, preferably 6-14 metagenomes per river;
 - high crAssphage detection in the original dataset;
-- clear hgcA-crAssphage relationship in the original paper, used here only as a data-quality and sewage-gradient proxy;
+- clear marker-crAssphage relationship in the metadata, used here only as a data-quality and sewage-gradient proxy;
 - enough samples to see whether `arsM` is detectable and whether an `arsM ~ crAssphage` signal exists.
 
-Do not treat original hgcA detection as a biological requirement for arsenic methylation. It is only a practical signal that the river has a strong sewage gradient and usable metagenomic data.
+Do not treat prior marker detection as a biological requirement for arsenic methylation. It is only a practical signal that the river has a strong sewage gradient and usable metagenomic data.
 
 ## First-Round Candidates
 
-| Priority | River | Samples | Original crAssphage-positive | Original hgcA-positive | hgcA-crAssphage R | p | Why use |
+| Priority | River | Samples | crAssphage-positive | marker-positive | marker-crAssphage R | p | Why use |
 |---|---:|---:|---:|---:|---:|---:|---|
 | 1 | ShiQi River | 7 | 7/7 | 7/7 | 0.933 | 2.19e-3 | Very small, complete detection, strong sewage signal |
 | 2 | Plata River | 8 | 8/8 | 8/8 | 0.927 | 9.37e-4 | Very small, complete detection, strong correlation |
@@ -37,10 +37,10 @@ ShiQi River + Plata River + Ter River + Suze River + Han River = 54 samples
 
 ## Optional / Second-Round Candidates
 
-| River | Samples | Original crAssphage-positive | Original hgcA-positive | hgcA-crAssphage R | p | Comment |
+| River | Samples | crAssphage-positive | marker-positive | marker-crAssphage R | p | Comment |
 |---|---:|---:|---:|---:|---:|---|
 | Yamuna River | 6 | 5/6 | 6/6 | 0.890 | 1.74e-2 | Very small, but n=6 is weak for correlation |
-| Leine river | 12 | 12/12 | 10/12 | 0.897 | 7.52e-5 | Good hgcA signal, but hgcB correlation was weak in the original data |
+| Leine river | 12 | 12/12 | 10/12 | 0.897 | 7.52e-5 | Good marker signal, but secondary-marker correlation was weak in the source metadata |
 | Bardello River | 8 | 6/8 | 4/8 | 0.925 | 2.83e-3 | Useful as a stress test, not ideal as first positive screen |
 
 ## Accessions
